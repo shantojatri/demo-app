@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "@remixicon/vue": "^4.2.0",
-        "flowbite": "^2.4.1"
+        "flowbite": "^2.4.1",
+        "vue-toastification": "^2.0.0-rc.5"
     }
 }

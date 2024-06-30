@@ -29,7 +29,7 @@ class UserStoreRequest extends FormRequest
             "email"                 => ['required', 'email', Rule::unique('users')->ignore($this->user)],
             "phone"                 => ['required', 'string'],
             "role"                  => ['required', Rule::enum(UserRoleEnum::class)],
-            "status"                => ['required', GlobalConstant::class],
+            "status"                => ['required'],
             "password"              => ['required', 'confirmed', 'min:8'],
             "password_confirmation" => ['required', 'min:8'],
         ];

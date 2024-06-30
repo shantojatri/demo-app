@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\GlobalConstant;
+use App\Http\Requests\UserStoreRequest;
+use Inertia\Inertia;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -12,7 +15,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $userPagination = User::paginate(GlobalConstant::DEFAULT_PER_PAGE);
+        return Inertia::render('User/Index', [
+            'users' => $userPagination
+        ]);
     }
 
     /**
@@ -20,15 +26,17 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('User/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-        //
+        $validated = $request->validated();
+        User::create($validated);
+        return redirect()->route('users.index');
     }
 
     /**
