@@ -2,21 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\GlobalConstant;
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Resources\UserResource;
-use Inertia\Inertia;
 use App\Models\User;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Http\Resources\UserResource;
+use App\Http\Requests\UserStoreRequest;
 
 class UserController extends Controller
 {
+    /**
+     * Service dependency injection with constructor property promotion
+     */
+    public function __construct(protected UserService $userService){}
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $userPagination = User::latest()->paginate(GlobalConstant::DEFAULT_PER_PAGE);
+        $userPagination = $this->userService->getPaginateData();
+
         return Inertia::render('User/Index', [
             'users' => $userPagination
         ]);
@@ -36,7 +42,7 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         $validated = $request->validated();
-        User::create($validated);
+        $this->userService->storeData($validated);
 
         return redirect()->route('users.index');
     }
@@ -67,10 +73,7 @@ class UserController extends Controller
     public function update(UserStoreRequest $request, User $user)
     {
         $validated = $request->validated();
-        if(is_null($request->password)){
-            $validated['password'] = $user->password;
-        }
-        $user->update($validated);
+        $this->userService->updateData($validated, $user);
 
         return redirect()->route('users.index');
     }
@@ -80,7 +83,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
+        $this->userService->deleteData($user);
+
         return back();
     }
 }

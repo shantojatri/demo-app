@@ -9,3 +9,9 @@ export const formRoleOptions = [
     {label: 'Admin', value: 'admin'},
     {label: 'Customer', value: 'customer'},
 ]
+
+export const formRoleOptionsForAdmin = [
+    {label: 'Choose any role', value: null},
+    { label: 'Admin', value: 'admin' },
+    // {label: 'Customer', value: 'customer'}
+]

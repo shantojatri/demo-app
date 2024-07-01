@@ -23,7 +23,17 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('/users', UserController::class);
+    # User Controller routes
+    Route::prefix('admin')->controller(UserController::class)->group(function () {
+        Route::get('/users', 'index')->name('users.index')->middleware('role:admin,super-admin');
+        Route::get('/users/create', 'create')->name('users.create')->middleware('role:admin,super-admin');
+        Route::post('/users', 'store')->name('users.store')->middleware('role:admin,super-admin');
+        Route::get('/users/{user}', 'show')->name('users.show')->middleware('role:admin,super-admin');
+        Route::get('/users/{user}/edit', 'edit')->name('users.edit')->middleware('role:super-admin');
+        Route::put('/users/{user}', 'update')->name('users.update')->middleware('role:super-admin');
+        Route::delete('/users/{user}', 'destroy')->name('users.destroy')->middleware('role:super-admin');
+    });
+    // Route::resource('/users', UserController::class)->middleware('role:admin,super-admin');
 });
 
 require __DIR__.'/auth.php';

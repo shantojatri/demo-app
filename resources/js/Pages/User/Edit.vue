@@ -2,7 +2,7 @@
 import { reactive, ref, onMounted } from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { useToast } from "vue-toastification";
-import { formStatusOptions, formRoleOptions } from "@/Constants/commonConstant";
+import { formStatusOptions, formRoleOptions, formRoleOptionsForAdmin } from "@/Constants/commonConstant";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
@@ -133,11 +133,27 @@ onMounted(() => {
                                         <SelectOptionInput
                                             v-model="userParams.role"
                                             id="role"
+                                            v-if="$page.props.auth.user.role ==='super-admin'"
                                         >
                                             <option
                                                 v-for="(
                                                     option, key
                                                 ) in formRoleOptions"
+                                                :key="key"
+                                                :value="option.value"
+                                            >
+                                                {{ option.label }}
+                                            </option>
+                                        </SelectOptionInput>
+                                        <SelectOptionInput
+                                            v-model="userParams.role"
+                                            id="role"
+                                            v-else
+                                        >
+                                            <option
+                                                v-for="(
+                                                    option, key
+                                                ) in formRoleOptionsForAdmin"
                                                 :key="key"
                                                 :value="option.value"
                                             >

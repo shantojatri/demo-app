@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { Link } from "@inertiajs/vue3";
 import { RiLogoutBoxLine } from "@remixicon/vue";
 import { RiPieChartLine } from "@remixicon/vue";
@@ -23,7 +23,7 @@ import { RiGroupLine } from "@remixicon/vue";
                         <span class="ml-3">Dashboard</span>
                     </Link>
                 </li>
-                <li>
+                <li v-if="$page.props.auth.user.role !== 'customer'">
                     <Link
                         :href="route('users.index')"
                         class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"

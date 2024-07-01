@@ -88,7 +88,7 @@ const DeleteData = (userId) => {
                                 class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                             >
                                 <RiAddLine class="mr-1" />
-                                Add product
+                                Add User
                             </Link>
                         </div>
                     </div>
@@ -180,7 +180,7 @@ const DeleteData = (userId) => {
                                                         </span>
                                                     </Link>
                                                 </li>
-                                                <li>
+                                                <li v-if="$page.props.auth.user.role ==='super-admin'">
                                                     <Link
                                                         :href="route('users.edit', user.id)"
                                                         class="flex items-center py-2 px-4 hover:bg-indigo-100"
@@ -191,7 +191,7 @@ const DeleteData = (userId) => {
                                                         </span>
                                                     </Link>
                                                 </li>
-                                                <li>
+                                                <li v-if="$page.props.auth.user.role ==='super-admin'">
                                                     <button
                                                         @click="DeleteData(user.id)"
                                                         class="flex items-center py-2 px-4 hover:bg-indigo-100 w-full"
