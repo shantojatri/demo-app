@@ -1,9 +1,37 @@
 <script setup>
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { RiAddLine } from "@remixicon/vue";
 import { RiMoreFill } from "@remixicon/vue";
+import { RiDeleteBinLine } from "@remixicon/vue";
+import { RiEyeLine } from "@remixicon/vue";
+import { RiEdit2Line } from "@remixicon/vue";
+import { useToast } from "vue-toastification";
+import Swal from "sweetalert2";
+
+const toast = useToast();
 const props = defineProps(["users"]);
+
+const DeleteData = (userId) => {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(route('users.destroy', userId), {
+                preserveScroll: true,
+                onSuccess: () =>
+                    toast.success(`User deleted successfully`),
+                onError: (errors) => console.log(errors),
+            });
+        }
+    });
+};
 </script>
 
 <template>
@@ -98,8 +126,30 @@ const props = defineProps(["users"]);
                                     </th>
                                     <td class="px-4 py-3">{{ user.email }}</td>
                                     <td class="px-4 py-3">{{ user.phone }}</td>
-                                    <td class="px-4 py-3">{{ user.role }}</td>
-                                    <td class="px-4 py-3">{{ user.status }}</td>
+                                    <td class="px-4 py-3">
+                                        <span
+                                            class="text-xs font-medium me-2 px-2.5 py-0.5 rounded"
+                                            :class="
+                                                user.role === 'super-admin'
+                                                    ? 'bg-pink-100 text-pink-800' : user.role === 'admin'
+                                                    ? 'bg-indigo-100 text-indigo-800' : 'bg-yellow-100 text-yellow-800'
+                                            "
+                                        >
+                                            {{ user.role }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <span
+                                            class="text-xs font-medium me-2 px-2.5 py-1 rounded "
+                                            :class="
+                                                user.status === 'active'
+                                                    ? 'bg-green-100 text-green-800'
+                                                    : 'bg-red-100 text-red-800'
+                                            "
+                                        >
+                                            {{ user.status }}
+                                        </span>
+                                    </td>
                                     <td
                                         class="px-4 py-3 flex items-center justify-end"
                                     >
@@ -120,27 +170,39 @@ const props = defineProps(["users"]);
                                                 :aria-labelledby="`action-dropdown-${user.id}`"
                                             >
                                                 <li>
-                                                    <a
-                                                        href="#"
-                                                        class="block py-2 px-4 hover:bg-gray-100"
-                                                        >Show</a
+                                                    <Link
+                                                        :href="route('users.show', user.id)"
+                                                        class="flex items-center py-2 px-4 hover:bg-indigo-100"
                                                     >
+                                                        <RiEyeLine />
+                                                        <span class="ml-2">
+                                                            Show
+                                                        </span>
+                                                    </Link>
                                                 </li>
                                                 <li>
-                                                    <a
-                                                        href="#"
-                                                        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                                        >Edit</a
+                                                    <Link
+                                                        :href="route('users.edit', user.id)"
+                                                        class="flex items-center py-2 px-4 hover:bg-indigo-100"
                                                     >
+                                                        <RiEdit2Line />
+                                                        <span class="ml-2">
+                                                            Edit
+                                                        </span>
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <button
+                                                        @click="DeleteData(user.id)"
+                                                        class="flex items-center py-2 px-4 hover:bg-indigo-100 w-full"
+                                                    >
+                                                        <RiDeleteBinLine />
+                                                        <span class="ml-2">
+                                                            Delete
+                                                        </span>
+                                                    </button>
                                                 </li>
                                             </ul>
-                                            <div class="py-1">
-                                                <a
-                                                    href="#"
-                                                    class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                                                    >Delete</a
-                                                >
-                                            </div>
                                         </div>
                                     </td>
                                 </tr>

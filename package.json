@@ -20,6 +20,7 @@
     "dependencies": {
         "@remixicon/vue": "^4.2.0",
         "flowbite": "^2.4.1",
+        "sweetalert2": "^11.12.1",
         "vue-toastification": "^2.0.0-rc.5"
     }
 }

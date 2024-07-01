@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constants\GlobalConstant;
 use App\Http\Requests\UserStoreRequest;
+use App\Http\Resources\UserResource;
 use Inertia\Inertia;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $userPagination = User::paginate(GlobalConstant::DEFAULT_PER_PAGE);
+        $userPagination = User::latest()->paginate(GlobalConstant::DEFAULT_PER_PAGE);
         return Inertia::render('User/Index', [
             'users' => $userPagination
         ]);
@@ -36,6 +37,7 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         User::create($validated);
+
         return redirect()->route('users.index');
     }
 
@@ -44,7 +46,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return Inertia::render('User/Show', [
+            'user' => UserResource::make($user),
+        ]);
     }
 
     /**
@@ -52,15 +56,23 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return Inertia::render('User/Edit', [
+            'user' => UserResource::make($user),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UserStoreRequest $request, User $user)
     {
-        //
+        $validated = $request->validated();
+        if(is_null($request->password)){
+            $validated['password'] = $user->password;
+        }
+        $user->update($validated);
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -68,6 +80,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return back();
     }
 }

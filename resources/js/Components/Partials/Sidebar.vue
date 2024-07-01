@@ -24,13 +24,13 @@ import { RiGroupLine } from "@remixicon/vue";
                     </Link>
                 </li>
                 <li>
-                    <a
-                        href="#"
+                    <Link
+                        :href="route('users.index')"
                         class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                     >
                         <RiGroupLine />
                         <span class="flex-1 ml-3 whitespace-nowrap">Users</span>
-                    </a>
+                    </Link>
                 </li>
                 <li>
                     <button
