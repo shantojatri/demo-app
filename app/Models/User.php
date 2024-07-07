@@ -4,13 +4,17 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\UserRoleEnum;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+
+    protected $appends = ['IsSuperAdmin', 'IsAdmin', 'IsCustomer'];
 
     /**
      * The attributes that are mass assignable.
@@ -46,6 +50,19 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
+            // 'role'              =>  UserRoleEnum::class,
         ];
+    }
+
+    public function getIsSuperAdminAttribute() {
+        return $this->role === UserRoleEnum::SUPER_ADMIN->value;
+    }
+
+    public function getIsAdminAttribute() {
+        return $this->role === UserRoleEnum::ADMIN->value;
+    }
+
+    public function getIsCustomerAttribute() {
+        return $this->role === UserRoleEnum::CUSTOMER->value;
     }
 }

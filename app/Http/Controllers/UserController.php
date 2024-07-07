@@ -21,11 +21,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $userPagination = $this->userService->getPaginateData();
+        return User::all();
+        // return $userPagination = $this->userService->getPaginateData();
 
-        return Inertia::render('User/Index', [
-            'users' => $userPagination
-        ]);
+        // return Inertia::render('User/Index', [
+        //     'users' => $userPagination
+        // ]);
     }
 
     /**
@@ -52,9 +53,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return Inertia::render('User/Show', [
-            'user' => UserResource::make($user),
-        ]);
+        return $user;
+        // return Inertia::render('User/Show', [
+        //     'user' => UserResource::make($user),
+        // ]);
     }
 
     /**
